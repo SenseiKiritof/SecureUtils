@@ -4,6 +4,18 @@ This library exposes two utils:
 - **AddSecureConfig** method
 - **SecureUtils** class
 
+## Installation
+```
+dotnet pack -c Release
+``` 
+if needed, add local nuget feed:
+``` 
+mkdir ~/nuget-local
+nuget add source ~/nuget-local --name LocalPackages
+dotnet nuget push SSecureUtils/bin/Release/SSecureUtils.1.0.0.nupkg --source LocalPackages
+```
+
+
 ## AddSecureConfig
 
 This static method is useful to include in the project AES encrypted properties.
