@@ -12,7 +12,7 @@ if needed, add local nuget feed:
 ``` 
 mkdir ~/nuget-local
 nuget add source ~/nuget-local --name LocalPackages
-dotnet nuget push SSecureUtils/bin/Release/SSecureUtils.1.0.0.nupkg --source LocalPackages
+dotnet nuget push SSecureUtils/bin/Release/SSecureUtils.1.1.0.nupkg --source LocalPackages
 ```
 
 
@@ -44,19 +44,39 @@ This static class exposes two utils methods:
 - string Encrypt(string text, string key)
 - string Decrypt(string base64Text, string key)
 
-Both methods use AES encryption.
+Both methods use AES-GCM, which hides the content *and* detects tampering: a value
+altered after encryption is rejected instead of being decrypted into something else.
+The key is hashed with SHA-256, so any key length works — AES itself only accepts
+16, 24 or 32 bytes.
 
 ### Encrypt
 
-The encrypt method takes as input parameters the string to encrypt and the key to use for AES encryption.
-The IV is randomly generated and added as the first 16 bytes of the encrypted string; the output string will be in base64 format.
+Takes the string to encrypt and the key. The output is `v2:` followed by base64 of
+`nonce (12 bytes) | tag (16 bytes) | ciphertext`.
 
 ### Decrypt
 
-The decrypt method takes as input parameters the encrypted string (in base 64 format) and the key to use for AES decryption.
-The IV is retrieved from the first 16 bytes of the encrypted string and then used for decryption.
+Takes the encrypted string and the key. Values carrying the `v2:` prefix go through
+AES-GCM; values without it are read with the previous format, AES-CBC with the IV
+in the first 16 bytes. **Nothing already encrypted needs to be re-encrypted**: the
+old format stays readable, it is simply no longer produced.
+
+A value that has been tampered with, or a wrong key, raises `CryptographicException`
+rather than returning garbage — that is the point of the change.
+
+### Why it changed
+
+The previous format was AES-CBC with no authentication. Ciphertext could be altered
+without anyone noticing, and in CBC flipping a bit in one block flips the same bit
+in the next block of plaintext: targeted manipulation, not noise. Decryption errors
+were also distinguishable from one another, which is what makes a padding oracle
+possible.
 
 ## CyberChef
+
+> These recipes produce and read the **legacy CBC format**, which is still accepted on
+> decryption but is no longer what the library writes. They remain useful to read
+> values encrypted before the change.
 
 To encrypt the properties without writing a dotnet core tool, [CyberChef](https://gchq.github.io/CyberChef) can be used.
 

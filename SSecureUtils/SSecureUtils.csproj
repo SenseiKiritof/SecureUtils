@@ -10,7 +10,7 @@
         <PackageProjectUrl>https://github.com/SenseiKiritof/SSecureUtils</PackageProjectUrl>
         <Title>SSecureUtils</Title>
         <Description>Super Secure Utils Library</Description>
-        <PackageVersion>1.0.0</PackageVersion>
+        <PackageVersion>1.1.0</PackageVersion>
     </PropertyGroup>
 
     <ItemGroup>
