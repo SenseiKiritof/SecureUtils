@@ -7,7 +7,10 @@
         <Authors>SenseiKiritof</Authors>
         <Copyright>SenseiKiritof</Copyright>
         <Owners>SenseiKiritof</Owners>
-        <PackageProjectUrl>https://github.com/SenseiKiritof/SSecureUtils</PackageProjectUrl>
+        <PackageProjectUrl>https://github.com/SenseiKiritof/SecureUtils</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/SenseiKiritof/SecureUtils.git</RepositoryUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
         <Title>SSecureUtils</Title>
         <Description>Super Secure Utils Library</Description>
         <PackageVersion>1.1.0</PackageVersion>
@@ -16,6 +19,10 @@
     <ItemGroup>
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="../README.md" Pack="true" PackagePath="/" />
     </ItemGroup>
 
 </Project>
