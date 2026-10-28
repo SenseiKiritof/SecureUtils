@@ -6,13 +6,17 @@ This library exposes two utils:
 
 ## Installation
 ```
-dotnet pack -c Release
-``` 
-if needed, add local nuget feed:
-``` 
-mkdir ~/nuget-local
-nuget add source ~/nuget-local --name LocalPackages
-dotnet nuget push SSecureUtils/bin/Release/SSecureUtils.1.1.0.nupkg --source LocalPackages
+dotnet add package SSecureUtils
+```
+The current version on nuget.org is 1.1.0.
+
+### Build from source
+
+To use a local build, create a local feed and push the generated package:
+```
+dotnet pack -c Release -o ./artifacts
+dotnet nuget add source ~/nuget-local --name LocalPackages
+dotnet nuget push ./artifacts/SSecureUtils.*.nupkg --source LocalPackages
 ```
 
 
