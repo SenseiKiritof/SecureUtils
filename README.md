@@ -8,7 +8,7 @@ This library exposes two utils:
 ```
 dotnet add package SSecureUtils
 ```
-The current version on nuget.org is 1.1.0.
+The current version on nuget.org is 1.1.1.
 
 ### Build from source
 
