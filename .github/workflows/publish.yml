@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write # OIDC token per Trusted Publishing su nuget.org
 
 jobs:
   publish:
@@ -20,7 +21,15 @@ jobs:
       - name: Pack
         run: dotnet pack SSecureUtils/SSecureUtils.csproj -c Release -o artifacts -p:PackageVersion="${GITHUB_REF_NAME#v}"
 
+      # Scambia il token OIDC di GitHub con una API key NuGet valida 1 ora.
+      # Nessun secret da salvare: la policy si configura su nuget.org.
+      - name: NuGet login
+        id: login
+        uses: NuGet/login@v1
+        with:
+          user: SenseiKiritof # username nuget.org, non l'email
+
       - name: Push to NuGet
         run: dotnet nuget push artifacts/*.nupkg --source https://api.nuget.org/v3/index.json --api-key "$NUGET_API_KEY" --skip-duplicate
         env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+          NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
